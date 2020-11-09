@@ -2,79 +2,206 @@ package com.example.ea2_merida;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-import Retrofit.ComunicacionApiRest;
-import Retrofit.PostRegistroLogin;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Registro extends AppCompatActivity {
-    private EditText nombre, apellido, contraseña, dni, emali, comision;
+    private EditText nombre, apellido, password, dni, email, comision, entorno;
     private Context context;
+    private TextView txtResp;
+    private Button btnRegistrar;
+    public String token = "";
+    public IntentFilter filtro;
+    private BroadcastReceiver receiverRegistro = new ReceptorOperacionRegistro();
+
+    protected  void onDrestroy(){ super.onDestroy();}
+
+    protected void onStop(){ super.onStop();}
+
+    private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo ni = manager.getActiveNetworkInfo();
+            onNetworkChange(ni, context);
+        }
+
+        private void onNetworkChange(NetworkInfo networkInfo, Context context){
+            if(networkInfo != null && networkInfo.isConnected()){
+                Log.d("MenuActivity", "CONNECTED");
+            }else{
+                Log.d("MenuActivity", "DISCONNECTED");
+                Toast.makeText(context.getApplicationContext(), "ATENCION! No hay acceso a Internet", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+    private static final String URI_REGISTRO = "http://so-unlam.net.ar/api/api/register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
+
+        registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         nombre = (EditText) findViewById(R.id.etNom);
         apellido = (EditText) findViewById(R.id.eTApe);
-        contraseña = (EditText) findViewById(R.id.eTContraseña);
         dni = (EditText) findViewById(R.id.eTDni);
-        emali = (EditText) findViewById(R.id.idEmail);
+        email = (EditText) findViewById(R.id.idEmail);
+        password = (EditText) findViewById(R.id.eTContraseña);
         comision = (EditText) findViewById(R.id.eTcomision);
-        Intent intent = new Intent();
-        context = this;
+        //entorno = (EditText) findViewById(R.id.eTEntorno);
+        txtResp = (TextView) findViewById(R.id.textrespuesta);
+        btnRegistrar = (Button) findViewById(R.id.btnRegistro);
+
+        btnRegistrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(esValido()){
+                    JSONObject obj = new JSONObject();
+                    try{
+                        obj.put("env", "PROD");
+                        obj.put("name", nombre.getText().toString());
+                        obj.put("lastname", apellido.getText().toString());
+                        obj.put("dni", Integer.parseInt(apellido.getText().toString()));
+                        obj.put("email", email.getText().toString());
+                        obj.put("password", password.getText().toString());
+                        obj.put("comission", Integer.parseInt(comision.getText().toString()));
+
+                        Intent i = new Intent(Registro.this, ServiceHTTP.class);
+
+                        i.putExtra("uri", URI_REGISTRO);
+                        i.putExtra("datosJson", obj.toString());
+
+                        startService(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                configurarBroadcastReceiverRegistro();
+            }
+        });
     }
 
-    public void ComprobarConexionRegistro(View v){
-        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo ni = manager.getActiveNetworkInfo();
-
-        if(ni != null && ni.isConnected()){
-            registrar();
-        }else
-            Toast.makeText(getApplicationContext(), "No se pudo realizar registro " +
-                    "su Internet esta desconectada", Toast.LENGTH_SHORT).show();
-    }
-
-    public void registrar(){
-        PostRegistroLogin postRegistroLogin = new PostRegistroLogin();
-        if(comision.getText().toString().isEmpty()){
-            Toast.makeText(context, "Debe ingresar el numero de Comision", Toast.LENGTH_LONG ).show();
-            return;
+    private void enviarIntent(){
+        Log.i("TOKEN es:", token);
+        if(token != ""){
+            Intent i = new Intent ( Registro.this, Login.class);
+            i.putExtra("token", token);
+            startActivity(i);
+        }else{
+            txtResp = (TextView) findViewById(R.id.textrespuesta);
+            txtResp.setText("ATENCION! Fallo la conexion con el servidor en Login ");
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    txtResp.setText("");
+                }
+            }, 3000);
         }
-        if(dni.getText().toString().isEmpty()){
-            Toast.makeText(context, "Debe ingresar el numero de DNI", Toast.LENGTH_LONG).show();
-            return;
-        }
-        String emailString, passwordString, lastnameString, nameString;
-        nameString = nombre.getText().toString();
-        lastnameString = apellido.getText().toString();
-        int dniInt = Integer.parseInt(dni.getText().toString());
-        emailString = emali.getText().toString();
-        passwordString = contraseña.getText().toString();
-        int comisionInt = Integer.parseInt(comision.getText().toString());
-
-        postRegistroLogin.setName(nameString);
-        postRegistroLogin.setLastname(lastnameString);
-        postRegistroLogin.setDni(dniInt);
-        postRegistroLogin.setEmail(emailString);
-        postRegistroLogin.setPassword(passwordString);
-        postRegistroLogin.setComission(comisionInt);
-
-
-        ComunicacionApiRest comunicacionApiRest = new ComunicacionApiRest(this);
-        comunicacionApiRest.enviarPostRegistro(postRegistroLogin);
     }
 
-    public void irLogin(View v){
+    private void configurarBroadcastReceiverRegistro(){
+        filtro = new IntentFilter("android.intent.action.MAIN");
+        filtro.addCategory("android.intent.category.LAUNCHER");
+        registerReceiver(receiverRegistro, filtro);
+    }
+
+    class ReceptorOperacionRegistro extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                String datosJsonString = intent.getStringExtra("datosJson");
+                token = intent.getStringExtra("token");
+                JSONObject datosJson = new JSONObject(datosJsonString);
+                if(datosJson.toString() == null) return;
+                if(token != "" && intent.getStringExtra("uri").equals( URI_REGISTRO)){
+                    Intent i = new Intent(Registro.this, Login.class);
+                    i.putExtra("token", token );
+                    startActivity(i);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtResp.setText(token);
+                        }
+                    }, 3000);
+                }else {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtResp.setText("ATENCION! Fallo la conexion con el servidor, algunos de los campos ingresador no son validos");
+                        }
+                    }, 2000);
+                }
+                txtResp.setText(datosJsonString);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean esValido(){
+        String campNombre = nombre.getText().toString();
+        String campApellido = apellido.getText().toString();
+        String campDni = dni.getText().toString();
+        String campEmail = email.getText().toString();
+        String campPass = password.getText().toString();
+        String campComi = comision.getText().toString();
+        String campEnt = entorno.getText().toString();
+
+        boolean valido = true;
+        if(campNombre.isEmpty()){
+            nombre.setError("Debe ingresar su nombre para registrarse");
+            valido = false;
+        }
+        if(campApellido.isEmpty()){
+            apellido.setError("Debe ingresar su apellido para registrarse");
+            valido = false;
+        }
+        if(campDni.isEmpty() || campDni.length() > 8){
+            dni.setError("Numero de dni incorrecto, recuerde que no debe ingresar mas de 8 caracteres");
+            valido = false;
+        }
+        if(campEmail.isEmpty()){
+            email.setError("Debe ingresar su email para registrarse");
+            valido = false;
+        }
+        if(campPass.isEmpty() || campPass.length() < 8){
+            password.setError("Campo Password incorrecto, recuerde debe ingresar 8 caracteres o mas");
+            valido = false;
+        }
+        if(campComi.isEmpty()){
+            comision.setError("Debe ingresar la comision para registrarse");
+            valido = false;
+        }
+        if(campEnt.isEmpty()){
+            entorno.setError("Debe ingresar Un entorno correcto para registrarse");
+            valido = false;
+        }
+
+        return valido;
+    }
+
+    /*public void irLogin(View v){
         Intent intent = new Intent(Registro.this, Login.class);
         startActivity(intent);
-    }
+    }*/
 }

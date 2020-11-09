@@ -13,7 +13,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gusano extends View {
+public class Pelota extends View {
     private Paint paint;
     private float ancho;
     private float largo;
@@ -23,16 +23,16 @@ public class Gusano extends View {
     private Bitmap bitmap;
     private int mWidth;
     private int mHeight;
-    private Bitmap gusano;
+    private Bitmap pelota;
     private float espacioMovimiento = this.ancho / 135;
     private float centroX;
     private float centroY;
     private float radio;
 
-    public Gusano(Context context){
+    public Pelota(Context context){
         super(context);
 
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gusano);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pelota);
         paint = new Paint();
     }
 

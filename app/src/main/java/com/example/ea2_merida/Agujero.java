@@ -6,13 +6,13 @@ import android.util.Log;
 import android.graphics.Paint;
 import android.view.View;
 
-public class Manzana extends View{
+public class Agujero extends View{
     Paint paint;
     float centroX;
     float centroY;
     float radio;
 
-    public Manzana(Context context){
+    public Agujero(Context context){
         super(context);
         paint = new Paint();
     }
@@ -24,19 +24,19 @@ public class Manzana extends View{
         canvas.drawCircle(centroX,centroY,radio,paint);
     }
 
-    public boolean isCovered(float gusanoX, float gusanoY){
+    public boolean isCovered(float pelotaX, float pelotaY){
         float minimoX = this.centroX-10;
         float minimoY = this.centroY-10;
         float maximoX = this.centroX+10;
         float maximoY = this.centroY+10;
         Log.i("pminimoX",String.valueOf(minimoX));
-        Log.i("pmCentroGusanoX", String.valueOf(gusanoX));
+        Log.i("pmCentroGusanoX", String.valueOf(pelotaX));
         Log.i("pmaximoX",String.valueOf(maximoX));
         Log.i("pminimoY",String.valueOf(minimoY));
-        Log.i("pmCentroGusanoY",String.valueOf(gusanoY));
+        Log.i("pmCentroGusanoY",String.valueOf(pelotaY));
         Log.i("pmaximoY",String.valueOf(maximoY));
 
-        if(gusanoX > minimoX && gusanoX < maximoX && gusanoY > minimoY && gusanoY < maximoY){
+        if(pelotaX > minimoX && pelotaX < maximoX && pelotaY > minimoY && pelotaY < maximoY){
             return true;
         }
         return false;
