@@ -68,7 +68,7 @@ public class ServiceHTTP extends IntentService{
     }
 
 
-    public void onDrestroy(){super.onDestroy();}
+    public void onDestroy(){super.onDestroy();}
 
     private String post(String uri, JSONObject datosJson){
         HttpURLConnection conexionHttp = null;

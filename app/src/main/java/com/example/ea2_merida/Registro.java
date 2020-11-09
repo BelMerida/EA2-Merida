@@ -20,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Registro extends AppCompatActivity {
-    private EditText nombre, apellido, password, dni, email, comision, entorno;
+    private EditText nombre, apellido, password, dni, email, comision;
     private Context context;
     private TextView txtResp;
     private Button btnRegistrar;
@@ -28,7 +28,7 @@ public class Registro extends AppCompatActivity {
     public IntentFilter filtro;
     private BroadcastReceiver receiverRegistro = new ReceptorOperacionRegistro();
 
-    protected  void onDrestroy(){ super.onDestroy();}
+    protected  void onDestroy(){ super.onDestroy();}
 
     protected void onStop(){ super.onStop();}
 
@@ -64,7 +64,6 @@ public class Registro extends AppCompatActivity {
         email = (EditText) findViewById(R.id.idEmail);
         password = (EditText) findViewById(R.id.eTContraseña);
         comision = (EditText) findViewById(R.id.eTcomision);
-        //entorno = (EditText) findViewById(R.id.eTEntorno);
         txtResp = (TextView) findViewById(R.id.textrespuesta);
         btnRegistrar = (Button) findViewById(R.id.btnRegistro);
 
@@ -72,12 +71,13 @@ public class Registro extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(esValido()){
+                    //Log.i();
                     JSONObject obj = new JSONObject();
                     try{
-                        obj.put("env", "PROD");
+                        obj.put("env", "TEST");
                         obj.put("name", nombre.getText().toString());
                         obj.put("lastname", apellido.getText().toString());
-                        obj.put("dni", Integer.parseInt(apellido.getText().toString()));
+                        obj.put("dni", Integer.parseInt(dni.getText().toString()));
                         obj.put("email", email.getText().toString());
                         obj.put("password", password.getText().toString());
                         obj.put("comission", Integer.parseInt(comision.getText().toString()));
@@ -165,7 +165,6 @@ public class Registro extends AppCompatActivity {
         String campEmail = email.getText().toString();
         String campPass = password.getText().toString();
         String campComi = comision.getText().toString();
-        String campEnt = entorno.getText().toString();
 
         boolean valido = true;
         if(campNombre.isEmpty()){
@@ -190,10 +189,6 @@ public class Registro extends AppCompatActivity {
         }
         if(campComi.isEmpty()){
             comision.setError("Debe ingresar la comision para registrarse");
-            valido = false;
-        }
-        if(campEnt.isEmpty()){
-            entorno.setError("Debe ingresar Un entorno correcto para registrarse");
             valido = false;
         }
 

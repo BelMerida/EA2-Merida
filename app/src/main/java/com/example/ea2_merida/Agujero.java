@@ -2,6 +2,7 @@ package com.example.ea2_merida;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.Log;
 import android.graphics.Paint;
 import android.view.View;
@@ -21,6 +22,7 @@ public class Agujero extends View{
         radio= getWidth();
         centroX=2*radio-10;
         centroY= getHeight()-2*radio;
+        paint.setColor(Color.RED);
         canvas.drawCircle(centroX,centroY,radio,paint);
     }
 

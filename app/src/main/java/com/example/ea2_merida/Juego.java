@@ -75,9 +75,6 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
         iService = new Intent(this, ServiceTemp.class);
         startService(iService);
 
-        iServiceEvento = new Intent(this, ServiceRegistroEvento.class);
-        iServiceEvento.putExtra("token", token);
-        startService(iServiceEvento);
     }
 
     public void definirObstaculos(){
@@ -119,8 +116,7 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
                     cantMovimientos++;
                     verFinGame();
                     if(cantMovimientos == 1){
-                        //agregarEvento("primer movimiento de la pelota", "Sensor Acelerometro");
-                        ServiceRegistroEvento.agregarEvento("primer movimiento de la pelota", "sensor acelerometro");
+                        agregarEvento("primer movimiento de la pelota", "sensor acelerometro");
                     }
                 }
              if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
@@ -138,8 +134,7 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
                          pausa.setVisible(false);
                      }
                      ServiceTemp.setearPlay(play);
-                     ServiceRegistroEvento.agregarEvento(descripcion, "sensor Proximidad");
-                    //agregarEvento(descripcion, "sensor Proximidad");
+                     agregarEvento(descripcion, "sensor Proximidad");
                  }
              }
 
@@ -164,10 +159,8 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
         Intent intent = new Intent(this, Resultado.class);
         String tiempo = String.valueOf(this.temp.getTiempo());
         intent.putExtra("resultado", tiempo);
-        ServiceRegistroEvento.agregarEvento("Fin del juego", "finalizacion");
-        //agregarEvento("Fin del juego", "Finalizacion");
+        agregarEvento("Fin del juego", "finalizacion");
         ServiceTemp.terminar();
-        ServiceRegistroEvento.detener();
         startActivity(intent);
         finish();
     }

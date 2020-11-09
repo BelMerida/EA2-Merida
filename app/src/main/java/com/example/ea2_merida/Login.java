@@ -28,7 +28,6 @@ public class Login extends AppCompatActivity {
     public IntentFilter filtro;
     public String token ="";
 
-    Context context;
     static final String ACTION = "android.net.conn.CONNECTIVITY_CHANGED";
     static final String ACTION2 = "android.net.wifi.WIFI_STATE_CHANGED";
 
@@ -52,7 +51,7 @@ public class Login extends AppCompatActivity {
 
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v1) {
                 if(esValido()){
                     JSONObject obj = new JSONObject();
                     try{
