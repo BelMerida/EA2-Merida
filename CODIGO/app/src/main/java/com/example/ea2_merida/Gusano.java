@@ -13,7 +13,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pelota extends View {
+public class Gusano extends View {
     private Paint paint;
     private float ancho;
     private float largo;
@@ -29,11 +29,30 @@ public class Pelota extends View {
     private float centroY;
     private float radio;
 
-    public Pelota(Context context){
+    public Gusano(Context context){
         super(context);
 
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pelota);
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gusano);
         paint = new Paint();
+    }
+
+    public void onSizeChanged(int a, int b, int c, int d){
+        mWidth = getWidth() / 7;
+        mHeight = getWidth() / 7;
+        radio = mWidth /2;
+        centroY = posY + radio;
+        centroX = posX + radio;
+        //redimensiona el bitmap
+        pelota = Bitmap.createScaledBitmap(bitmap, mWidth, mHeight, true);
+    }
+
+    protected  void onDraw(Canvas canvas){
+        this.ancho = canvas.getWidth();
+        espacioMovimiento = this.ancho/110;
+        this.largo = canvas.getHeight();
+        this.centroX = posX+radio;
+        this.centroY = posY+radio;
+        canvas.drawBitmap(pelota,posX,posY,null);
     }
 
     public boolean mover(float x, float y, List<Obstaculo> listaObs) {
@@ -53,12 +72,13 @@ public class Pelota extends View {
         }
 
         List<Boolean> puede = sinObstaculo(listaObs);
-
+        //se mueve si hubo cambios en el eje X
         if(anteriorX != x){
+            //derecha
             if(puede.get(3) && x < margenInferior && posX + this.mWidth < this.ancho){
                 posX += espacioMovimiento;
                 seMovio = true;
-            } else if(puede.get(2) && x > margenSuperior && posX > 0){
+            } else if(puede.get(2) && x > margenSuperior && posX > 0){ //izquierda
                 posX -= espacioMovimiento;
                 seMovio = true;
             }

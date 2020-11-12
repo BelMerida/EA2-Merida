@@ -74,13 +74,13 @@ public class Registro extends AppCompatActivity {
                     //Log.i();
                     JSONObject obj = new JSONObject();
                     try{
-                        obj.put("env", "TEST");
+                        obj.put("env", "PROD");
                         obj.put("name", nombre.getText().toString());
                         obj.put("lastname", apellido.getText().toString());
                         obj.put("dni", Integer.parseInt(dni.getText().toString()));
                         obj.put("email", email.getText().toString());
                         obj.put("password", password.getText().toString());
-                        obj.put("comission", Integer.parseInt(comision.getText().toString()));
+                        obj.put("commission", Integer.parseInt(comision.getText().toString()));
 
                         Intent i = new Intent(Registro.this, ServiceHTTP.class);
 
@@ -97,24 +97,6 @@ public class Registro extends AppCompatActivity {
         });
     }
 
-    private void enviarIntent(){
-        Log.i("TOKEN es:", token);
-        if(token != ""){
-            Intent i = new Intent ( Registro.this, Login.class);
-            i.putExtra("token", token);
-            startActivity(i);
-        }else{
-            txtResp = (TextView) findViewById(R.id.textrespuesta);
-            txtResp.setText("ATENCION! Fallo la conexion con el servidor en Login ");
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    txtResp.setText("");
-                }
-            }, 3000);
-        }
-    }
 
     private void configurarBroadcastReceiverRegistro(){
         filtro = new IntentFilter("android.intent.action.MAIN");
@@ -195,8 +177,4 @@ public class Registro extends AppCompatActivity {
         return valido;
     }
 
-    /*public void irLogin(View v){
-        Intent intent = new Intent(Registro.this, Login.class);
-        startActivity(intent);
-    }*/
 }

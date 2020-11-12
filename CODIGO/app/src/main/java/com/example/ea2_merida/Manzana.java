@@ -7,30 +7,32 @@ import android.util.Log;
 import android.graphics.Paint;
 import android.view.View;
 
-public class Agujero extends View{
+public class Manzana extends View{
     Paint paint;
     float centroX;
     float centroY;
     float radio;
 
-    public Agujero(Context context){
+    public Manzana(Context context){
         super(context);
         paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
     public void onDraw(Canvas canvas){
+        super.onDraw(canvas);
         radio= getWidth();
         centroX=2*radio-10;
         centroY= getHeight()-2*radio;
-        paint.setColor(Color.RED);
-        canvas.drawCircle(centroX,centroY,radio,paint);
+        canvas.drawCircle(100,800,30,paint);
     }
 
     public boolean isCovered(float pelotaX, float pelotaY){
-        float minimoX = this.centroX-10;
-        float minimoY = this.centroY-10;
-        float maximoX = this.centroX+10;
-        float maximoY = this.centroY+10;
+        float minimoX = 70;
+        float minimoY = 700;
+        float maximoX = 200;
+        float maximoY = 900;
         Log.i("pminimoX",String.valueOf(minimoX));
         Log.i("pmCentroGusanoX", String.valueOf(pelotaX));
         Log.i("pmaximoX",String.valueOf(maximoX));

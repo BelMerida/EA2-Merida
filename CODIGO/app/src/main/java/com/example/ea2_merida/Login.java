@@ -55,6 +55,7 @@ public class Login extends AppCompatActivity {
                 if(esValido()){
                     JSONObject obj = new JSONObject();
                     try{
+                        //obj.put("env", "PROD");
                         obj.put("email", email.getText().toString());
                         obj.put("password", password.getText().toString());
                         Intent i = new Intent(Login.this, ServiceHTTP.class);
@@ -85,25 +86,6 @@ public class Login extends AppCompatActivity {
         }
     }*/
 
-    @SuppressLint("LongLogTag")
-    public void enviarIntent(){
-        Log.i ("El resultado de token es:",token);
-        if(token != ""){
-            Intent i = new Intent(Login.this, MenuPrincipal.class);
-            i.putExtra("token", token);
-            startActivity(i);
-        }else{
-            txtResp.setText("ATENCION! Fallo la conexion con el servidor. Puede que alguno de los campos ingresados no sean valido");
-            Handler handler = new Handler();
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    txtResp.setText("");
-                }
-            }, 5000);
-        }
-    }
 
     class ReceptorOperacion extends BroadcastReceiver{
 

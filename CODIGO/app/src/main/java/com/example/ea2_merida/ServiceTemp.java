@@ -17,7 +17,6 @@ public class ServiceTemp extends IntentService {
     private int tiempoInicial;
     private static boolean play = true;
 
-
     public ServiceTemp() {
         super("ServiceTemp");
     }
@@ -26,14 +25,12 @@ public class ServiceTemp extends IntentService {
         play = nPlay;
     }
 
-
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    protected void onHandleIntent( Intent intent) {
         //Temporizador en Background
         tiempoInicial = (int) System.currentTimeMillis();
         while (!termino) {
             Intent i = new Intent();
-
             int tiempoPausaActual = 0;
             if (!play)
                 inicioPausa = (int) System.currentTimeMillis();
@@ -51,7 +48,6 @@ public class ServiceTemp extends IntentService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
         termino = false;
         play = true;
@@ -67,7 +63,6 @@ public class ServiceTemp extends IntentService {
         Log.i("verTermina", String.valueOf(termino));
         termino = true;
     }
-
 
 }
 

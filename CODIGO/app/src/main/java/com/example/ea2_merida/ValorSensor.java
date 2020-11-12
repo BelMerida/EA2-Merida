@@ -59,9 +59,9 @@ public class ValorSensor extends AppCompatActivity implements SensorEventListene
 
         SharedPreferences prefs2 = getSharedPreferences("proximidad", Context.MODE_PRIVATE);
 
-        String valores4 = prefs2.getString("ValoresP0", "no hay valor");
-        String valores5 = prefs2.getString("ValoresP1", "no hay valor");
-        String valores6 = prefs2.getString("ValoresP2", "no hay valor");
+        String valores4 = prefs2.getString("valoresP0", "no hay valor");
+        String valores5 = prefs2.getString("valoresP1", "no hay valor");
+        String valores6 = prefs2.getString("valoresP2", "no hay valor");
 
         valores_proximidad2.setText(valores4);
         valores_proximidad3.setText(valores5);
@@ -114,7 +114,7 @@ public class ValorSensor extends AppCompatActivity implements SensorEventListene
         }else{
             preferencias = getSharedPreferences("proximidad", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferencias.edit();
-            String v = "valores" + n;
+            String v = "valoresP" + n;
             editor.putString(v, txt);
             editor.commit();
         }
@@ -134,6 +134,9 @@ public class ValorSensor extends AppCompatActivity implements SensorEventListene
 
     public void volver(View view){
         Intent intent = new Intent(ValorSensor.this, MenuPrincipal.class);
+        Bundle extras = getIntent().getExtras();
+        String token = extras.getString("token");
+        intent.putExtra("token", token);
         startActivity(intent);
     }
 }

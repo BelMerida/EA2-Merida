@@ -25,6 +25,8 @@
         <activity android:name=".Registro" />
         <activity android:name=".Login" />
         <service android:name=".ServiceHTTP"/>
+        <service android:name= ".ServiceTemp"
+            android:exported="false"/>
         <activity android:name=".Inicio">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

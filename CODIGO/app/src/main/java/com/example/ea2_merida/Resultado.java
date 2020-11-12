@@ -43,6 +43,9 @@ public class Resultado extends AppCompatActivity {
 
     public void volverAJugar(View v){
         Intent intent = new Intent(Resultado.this, MenuPrincipal.class);
+        Bundle extras = getIntent().getExtras();
+        String token = extras.getString("token");
+        intent.putExtra("token", token);
         startActivity(intent);
     }
 

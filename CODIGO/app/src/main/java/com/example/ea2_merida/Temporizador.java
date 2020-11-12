@@ -9,7 +9,7 @@ import android.view.View;
 public class Temporizador extends View {
     private Paint paint;
     private int minutos = 0;
-    private int segundos =0;
+    private int segundos = 0;
 
     public Temporizador(Context context){
         super(context);
