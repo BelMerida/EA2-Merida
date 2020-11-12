@@ -75,21 +75,19 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
     }
 
     public void definirObstaculos(){
-        //crea los obstaculos
         obstaculo2 = new Obstaculo(this, 300, 200, 15, 3, true);
-        //obstaculo3 = new Obstaculo(this, 400, 300, 15, 3, true);
-        obstaculo4 = new Obstaculo(this, 30, 400, 15, 3, true);
+        obstaculo3 = new Obstaculo(this, 400, 300, 15,3, true);
+        //obstaculo4 = new Obstaculo(this, -200, 400, 15,3,true);
         //obstaculo5 = new Obstaculo(this, 100, 500, 15, 3, true);
-        obstaculo6 = new Obstaculo(this, 60, 600, 15, 3, true);
-        obstaculo7 = new Obstaculo(this, 600, 700, 15, 3, true);
+        //obstaculo6 = new Obstaculo(this, 60, 600, 15, 3, true);
+        obstaculo7 = new Obstaculo(this, 600, 700, 15,3, true);
         //obstaculo8 = new Obstaculo(this, 200, 800, 15, 3, true);
 
-        //se agregan a la lista de obstaculos
         listaObs.add(obstaculo2);
-        //listaObs.add(obstaculo3);
-        listaObs.add(obstaculo4);
+        listaObs.add(obstaculo3);
+        //listaObs.add(obstaculo4);
         //listaObs.add(obstaculo5);
-        listaObs.add(obstaculo6);
+        //listaObs.add(obstaculo6);
         listaObs.add(obstaculo7);
         //listaObs.add(obstaculo8);
     }
@@ -120,7 +118,7 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
              if(event.sensor.getType() == Sensor.TYPE_PROXIMITY){
                  float valProx = Float.valueOf(event.values[0]);
                  Log.i("Valor Sensor Prox",String.valueOf(valProx));
-                 if(valProx == 3.0){
+                 if(valProx <= 3.0){
                      String descripcion = "";
                      if(play){
                          play = false;
@@ -134,7 +132,7 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
                          pausa.setVisible(false);
                      }
                      ServiceTemp.setearPlay(play);
-                     agregarEvento(descripcion, "sensor Proximidad");
+                     //agregarEvento(descripcion, "sensor Proximidad");
                  }
              }
         }
@@ -162,7 +160,7 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
         String token = extras.getString("token");
         intent.putExtra("token", token);
 
-        agregarEvento("Fin del juego", "finalizacion");
+        //agregarEvento("Fin del juego", "finalizacion");
         ServiceTemp.terminar();
         startActivity(intent);
         finish();
@@ -171,7 +169,7 @@ public class Juego extends AppCompatActivity implements SensorEventListener {
     protected void onResume(){
         super.onResume();
         IntentFilter filter = new IntentFilter();
-        filter.addAction("con.example.ea2_merida.TIEMPO");
+        filter.addAction("android.intent.action.TIEMPO");
         registerReceiver(receiverTemp, filter);
 
         sensorManager.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_GAME);

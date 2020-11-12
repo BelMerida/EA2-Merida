@@ -20,7 +20,11 @@
 
         <activity android:name=".Resultado"></activity>
         <activity android:name=".ValorSensor" />
-        <activity android:name=".Juego" />
+        <activity android:name=".Juego">
+            <intent-filter>
+                <action android:name="android.intent.action.TIEMPO"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".MenuPrincipal" />
         <activity android:name=".Registro" />
         <activity android:name=".Login" />

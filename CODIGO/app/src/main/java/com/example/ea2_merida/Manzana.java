@@ -33,12 +33,12 @@ public class Manzana extends View{
         float minimoY = 700;
         float maximoX = 200;
         float maximoY = 900;
-        Log.i("pminimoX",String.valueOf(minimoX));
+        /*Log.i("pminimoX",String.valueOf(minimoX));
         Log.i("pmCentroGusanoX", String.valueOf(pelotaX));
         Log.i("pmaximoX",String.valueOf(maximoX));
         Log.i("pminimoY",String.valueOf(minimoY));
         Log.i("pmCentroGusanoY",String.valueOf(pelotaY));
-        Log.i("pmaximoY",String.valueOf(maximoY));
+        Log.i("pmaximoY",String.valueOf(maximoY));*/
 
         if(pelotaX > minimoX && pelotaX < maximoX && pelotaY > minimoY && pelotaY < maximoY){
             return true;

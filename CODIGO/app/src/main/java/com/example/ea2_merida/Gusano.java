@@ -23,7 +23,7 @@ public class Gusano extends View {
     private Bitmap bitmap;
     private int mWidth;
     private int mHeight;
-    private Bitmap pelota;
+    private Bitmap gusano;
     private float espacioMovimiento = this.ancho / 135;
     private float centroX;
     private float centroY;
@@ -43,7 +43,7 @@ public class Gusano extends View {
         centroY = posY + radio;
         centroX = posX + radio;
         //redimensiona el bitmap
-        pelota = Bitmap.createScaledBitmap(bitmap, mWidth, mHeight, true);
+        gusano = Bitmap.createScaledBitmap(bitmap, mWidth, mHeight, true);
     }
 
     protected  void onDraw(Canvas canvas){
@@ -52,7 +52,7 @@ public class Gusano extends View {
         this.largo = canvas.getHeight();
         this.centroX = posX+radio;
         this.centroY = posY+radio;
-        canvas.drawBitmap(pelota,posX,posY,null);
+        canvas.drawBitmap(gusano,posX,posY,null);
     }
 
     public boolean mover(float x, float y, List<Obstaculo> listaObs) {
@@ -71,7 +71,7 @@ public class Gusano extends View {
             return seMovio;
         }
 
-        List<Boolean> puede = sinObstaculo(listaObs);
+        List<Boolean> puede = sinObstaculo(listaObs); //me devuelve para donde me puedo mover
         //se mueve si hubo cambios en el eje X
         if(anteriorX != x){
             //derecha

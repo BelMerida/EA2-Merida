@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.View;
 
 public class Obstaculo extends View{
@@ -16,6 +18,7 @@ public class Obstaculo extends View{
     private int divAncho;
     private float posX;
     private float posY;
+    Paint paint;
 
     public Obstaculo(Context context, float posX, float posY, int divAlto, int divAncho, boolean horizontal){
         super(context);
@@ -28,7 +31,7 @@ public class Obstaculo extends View{
         if(horizontal)
             bitmap= BitmapFactory.decodeResource(getResources(), R.drawable.obstaculo);
         else
-            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstaculo);
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.obstaculo1);
     }
 
     public void onSizeChanged(int a, int b, int c, int d){
@@ -47,6 +50,7 @@ public class Obstaculo extends View{
 
     public void onDraw(Canvas canvas){
         canvas.drawBitmap(obstaculo, posX, posY, null);
+        //canvas.drawCircle(posX,posY,50,paint);
     }
 
     public boolean existeObstaculo(float posX, float posY){

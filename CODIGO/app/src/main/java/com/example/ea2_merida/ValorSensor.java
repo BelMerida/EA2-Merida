@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,7 @@ public class ValorSensor extends AppCompatActivity implements SensorEventListene
         valores_proximidad2.setText(valores4);
         valores_proximidad3.setText(valores5);
         valores_proximidad4.setText(valores6);
+
 
     }
 
@@ -139,4 +143,5 @@ public class ValorSensor extends AppCompatActivity implements SensorEventListene
         intent.putExtra("token", token);
         startActivity(intent);
     }
+
 }

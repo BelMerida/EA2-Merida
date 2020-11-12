@@ -41,7 +41,7 @@ public class ServiceTemp extends IntentService {
             tiempoEnPausa += tiempoPausaActual;
             calcularTiempo();
             i.putExtra("cambioTiempo", tiempo);
-            i.setAction("com.example.ea2_merida.TIEMPO");
+            i.setAction("android.intent.action.TIEMPO");
             sendBroadcast(i);
             try {
                 sleep(1000);
